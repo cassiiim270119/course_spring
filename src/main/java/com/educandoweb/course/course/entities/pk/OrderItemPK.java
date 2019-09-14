@@ -30,7 +30,6 @@ public class OrderItemPK  implements Serializable {
         this.product = product;
     }
 
-    @JsonIgnore
     public Order getOrder() {
         return order;
     }

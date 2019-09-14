@@ -30,6 +30,7 @@ public class OrderItem implements Serializable {
         id.setProduct(product);
     }
 
+    @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
     }
