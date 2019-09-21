@@ -1,5 +1,6 @@
 package com.educandoweb.course.course.resources;
 
+import com.educandoweb.course.course.dto.UserDTO;
 import com.educandoweb.course.course.entities.User;
 import com.educandoweb.course.course.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ public class UserResource {
     UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 

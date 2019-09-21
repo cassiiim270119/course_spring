@@ -1,5 +1,6 @@
 package com.educandoweb.course.course.services;
 
+import com.educandoweb.course.course.dto.UserDTO;
 import com.educandoweb.course.course.entities.User;
 import com.educandoweb.course.course.repositories.UserRepository;
 import com.educandoweb.course.course.services.exceptions.DatabaseException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -18,12 +20,16 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        return userRepository.findAll().stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    public UserDTO findById(Long id) {
+        return userRepository.findById(id)
+                .map(UserDTO::new)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User user) {
