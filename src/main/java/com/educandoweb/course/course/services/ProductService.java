@@ -9,8 +9,11 @@ import com.educandoweb.course.course.entities.Product;
 import com.educandoweb.course.course.entities.User;
 import com.educandoweb.course.course.repositories.CategoryRepository;
 import com.educandoweb.course.course.repositories.ProductRepository;
+import com.educandoweb.course.course.services.exceptions.DatabaseException;
 import com.educandoweb.course.course.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -39,6 +42,13 @@ public class ProductService {
     }
 
     @Transactional
+    public ProductDTO insert(ProductCategoriesDTO dto) {
+        Product entity = dto.toEntity();
+        setProductCategories(entity, dto.getCategories());
+        return new ProductDTO(productRepository.save(entity));
+    }
+
+    @Transactional
     public ProductDTO update(Long id, ProductCategoriesDTO dto) {
         try {
             Product entity = productRepository.getOne(id);
@@ -46,6 +56,16 @@ public class ProductService {
             return new ProductDTO(productRepository.save(entity));
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            productRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -57,13 +77,6 @@ public class ProductService {
         if (dto.getCategories() != null && !dto.getCategories().isEmpty()) {
             setProductCategories(entity, dto.getCategories());
         }
-    }
-
-    @Transactional
-    public ProductDTO insert(ProductCategoriesDTO dto) {
-        Product entity = dto.toEntity();
-        setProductCategories(entity, dto.getCategories());
-        return new ProductDTO(productRepository.save(entity));
     }
 
     private void setProductCategories(Product entity, List<CategoryDTO> categories) {
