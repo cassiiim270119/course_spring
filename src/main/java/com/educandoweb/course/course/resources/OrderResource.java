@@ -1,7 +1,6 @@
 package com.educandoweb.course.course.resources;
 
-import com.educandoweb.course.course.entities.Order;
-import com.educandoweb.course.course.entities.User;
+import com.educandoweb.course.course.dto.OrderDTO;
 import com.educandoweb.course.course.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +19,12 @@ public class OrderResource {
     OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<Order>> findAll() {
+    public ResponseEntity<List<OrderDTO>> findAll() {
         return ResponseEntity.ok(orderService.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Order> findById(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.findById(id));
     }
 }
