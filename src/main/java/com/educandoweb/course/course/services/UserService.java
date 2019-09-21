@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,17 +47,18 @@ public class UserService {
         }
     }
 
-    public User update(Long id, User user) {
+    @Transactional
+    public UserDTO update(Long id, UserDTO user) {
         try {
             User entity = userRepository.getOne(id);
             updateData(entity, user);
-            return userRepository.save(user);
+            return new UserDTO(userRepository.save(entity));
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(User entity, User user) {
+    private void updateData(User entity, UserDTO user) {
         entity.setName(user.getName());
         entity.setEmail(user.getEmail());
         entity.setPhone(user.getPhone());
