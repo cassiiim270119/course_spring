@@ -3,6 +3,7 @@ package com.educandoweb.course.course.dto;
 import com.educandoweb.course.course.entities.Order;
 import com.educandoweb.course.course.entities.User;
 import com.educandoweb.course.course.entities.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,6 +12,8 @@ public class OrderDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
     private OrderStatus orderStatus;
     private Long clientId;

@@ -1,13 +1,10 @@
 package com.educandoweb.course.course.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_product")
@@ -86,7 +83,6 @@ public class Product implements Serializable {
         return categories;
     }
 
-    @JsonIgnore
     public Set<Order> getOrders() {
         Set<Order> set = new HashSet<>();
         for(OrderItem x : items) {
