@@ -1,6 +1,7 @@
 package com.educandoweb.course.course.resources;
 
 import com.educandoweb.course.course.dto.UserDTO;
+import com.educandoweb.course.course.dto.UserInsertDTO;
 import com.educandoweb.course.course.entities.User;
 import com.educandoweb.course.course.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User user) {
-        User savedUser = userService.insert(user);
+    public ResponseEntity<UserDTO> insert(@RequestBody UserInsertDTO user) {
+        UserDTO savedUser = userService.insert(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
         return ResponseEntity.created(uri).body(savedUser);

@@ -1,6 +1,7 @@
 package com.educandoweb.course.course.services;
 
 import com.educandoweb.course.course.dto.UserDTO;
+import com.educandoweb.course.course.dto.UserInsertDTO;
 import com.educandoweb.course.course.entities.User;
 import com.educandoweb.course.course.repositories.UserRepository;
 import com.educandoweb.course.course.services.exceptions.DatabaseException;
@@ -33,8 +34,8 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User user) {
-        return userRepository.save(user);
+    public UserDTO insert(UserInsertDTO user) {
+        return new UserDTO(userRepository.save(user.toEntity()));
     }
 
     public void delete(Long id) {
