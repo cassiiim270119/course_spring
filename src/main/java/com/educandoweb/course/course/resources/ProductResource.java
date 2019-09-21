@@ -2,8 +2,6 @@ package com.educandoweb.course.course.resources;
 
 import com.educandoweb.course.course.dto.ProductCategoriesDTO;
 import com.educandoweb.course.course.dto.ProductDTO;
-import com.educandoweb.course.course.dto.UserDTO;
-import com.educandoweb.course.course.dto.UserInsertDTO;
 import com.educandoweb.course.course.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +34,11 @@ public class ProductResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
         return ResponseEntity.created(uri).body(savedUser);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id,
+                                             @RequestBody ProductCategoriesDTO dto) {
+        return ResponseEntity.ok().body(productService.update(id, dto));
     }
 }
