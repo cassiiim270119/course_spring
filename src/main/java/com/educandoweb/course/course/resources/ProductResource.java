@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ProductResource {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductCategoriesDTO user) {
+    public ResponseEntity<ProductDTO> insert(@RequestBody @Valid ProductCategoriesDTO user) {
         ProductDTO savedUser = productService.insert(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
