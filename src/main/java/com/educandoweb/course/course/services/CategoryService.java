@@ -1,5 +1,6 @@
 package com.educandoweb.course.course.services;
 
+import com.educandoweb.course.course.dto.CategoryDTO;
 import com.educandoweb.course.course.entities.Category;
 import com.educandoweb.course.course.repositories.CategoryRepository;
 import com.educandoweb.course.course.services.exceptions.DatabaseException;
@@ -10,7 +11,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -18,16 +21,19 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> findAll() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public Category findById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    public CategoryDTO findById(Long id) {
+        return categoryRepository.findById(id).map(CategoryDTO::new)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Category insert(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO insert(CategoryDTO category) {
+        return new CategoryDTO(categoryRepository.save(category.toEntity()));
     }
 
     public void delete(Long id) {
@@ -40,11 +46,12 @@ public class CategoryService {
         }
     }
 
-    public Category update(Long id, Category category) {
+    @Transactional
+    public CategoryDTO update(Long id, CategoryDTO category) {
         try {
             Category entity = categoryRepository.getOne(id);
             entity.setName(category.getName());
-            return categoryRepository.save(category);
+            return new CategoryDTO(categoryRepository.save(entity));
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }

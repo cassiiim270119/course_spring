@@ -1,5 +1,6 @@
 package com.educandoweb.course.course.resources;
 
+import com.educandoweb.course.course.dto.CategoryDTO;
 import com.educandoweb.course.course.entities.Category;
 import com.educandoweb.course.course.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,18 @@ public class CategoryResource {
     CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
+    public ResponseEntity<List<CategoryDTO>> findAll() {
         return ResponseEntity.ok(categoryService.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Category> findById(@PathVariable Long id) {
+    public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Category> insert(@RequestBody Category category) {
-        Category savedCategory = categoryService.insert(category);
+    public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO category) {
+        CategoryDTO savedCategory = categoryService.insert(category);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedCategory.getId()).toUri();
         return ResponseEntity.created(uri).body(savedCategory);
@@ -42,8 +43,8 @@ public class CategoryResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Category> update(@PathVariable Long id,
-                                       @RequestBody Category category) {
+    public ResponseEntity<CategoryDTO> update(@PathVariable Long id,
+                                       @RequestBody CategoryDTO category) {
         return ResponseEntity.ok().body(categoryService.update(id, category));
     }
 }
